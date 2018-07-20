@@ -1,0 +1,17 @@
+import discord#We are importing discord
+import asyncio #Importing asyncio
+from discord.ext import commands
+
+bot = commands.Bot(command_prefix='yourprefix')#Your prefix
+
+class welcome():#Your class name example : welcome
+    def __init__(self, bot):
+        self.bot = bot
+
+    async def on_member_join(self, member):#For first event as you can see we don't need @bot.event we just need async
+    #Before we run the embed we will need to see, we need first to define member and self, beacuse we want welcome message to be sent to user that joined in the server and to get member.mention and server name
+        embed=discord.Embed(title="Welcome!", description="Welcome {0} to {1}. Have a good day!".format(member.mention, member.server.name), color=0xff00f6)
+        await self.bot.send_message(member, embed=embed)#We are sending the embed, To send the embed to the user in direct message we need to add member
+
+def setup(bot):
+    bot.add_cog(yourclassname(bot))#Your class name

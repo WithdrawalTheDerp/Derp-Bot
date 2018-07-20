@@ -1,0 +1,55 @@
+#We are going to first import discord
+import discord
+from discord.ext import commands
+
+bot = commands.Bot(command_prefix='Your prefix')#We are now creating our prefix
+startup_extensions = ["example1","example2","example3","example4"]#These are our extensions
+bot.remove_command('help')
+
+class bot():#Now we are going to create our class, name your class whatever you want example : Bot
+    def __init__(self, bot):
+        self.bot = bot
+
+@bot.event#Now we are creating our first even for starting the bot
+async def on_ready():
+    await bot.change_presence(game=discord.Game(name='Test'))#This line is only if you want bot to play something
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('------')
+
+@bot.command()#Loads and extension
+async def load(extension_name : str):
+    """Loads an extension."""
+    try:
+        bot.load_extension(extension_name)
+    except (AttributeError, ImportError) as e:
+        await bot.say("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+        return
+    await bot.say("{} loaded.".format(extension_name))
+
+@bot.command()#Unloads an extension
+async def unload(extension_name : str):
+    """Unloads an extension."""
+    bot.unload_extension(extension_name)
+    await bot.say("{} unloaded.".format(extension_name))
+
+@bot.command()
+async def add(left : int, right : int):
+    """Adds two numbers together."""
+    await bot.say(left + right)
+
+
+
+if __name__ == "__main__":
+    for extension in startup_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
+            
+def setup(bot):
+    bot.add_cog(yourclassname(bot))#Make sure to copy your class name from up to here
+
+bot.run('your token')#You must put your token to run the bot
